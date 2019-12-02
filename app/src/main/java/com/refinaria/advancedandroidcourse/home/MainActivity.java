@@ -1,8 +1,10 @@
-package com.refinaria.advancedandroidcourse;
+package com.refinaria.advancedandroidcourse.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.refinaria.advancedandroidcourse.R;
 
 public class MainActivity extends AppCompatActivity {
 
