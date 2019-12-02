@@ -1,6 +1,13 @@
 package com.refinaria.advancedandroidcourse.base;
 
+import com.refinaria.advancedandroidcourse.di.ActivityInjector;
+
+import javax.inject.Inject;
+
 public class App extends android.app.Application {
+
+    @Inject
+    ActivityInjector activityInjector;
 
     private ApplicationComponent component;
 
@@ -11,5 +18,11 @@ public class App extends android.app.Application {
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
+
+        component.inject(this);
+    }
+
+    public ActivityInjector getActivityInjector() {
+        return activityInjector;
     }
 }
