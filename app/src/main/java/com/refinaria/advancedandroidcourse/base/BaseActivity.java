@@ -15,6 +15,7 @@ import com.bluelinelabs.conductor.Router;
 import com.refinaria.advancedandroidcourse.R;
 import com.refinaria.advancedandroidcourse.di.Injector;
 import com.refinaria.advancedandroidcourse.di.ScreenInjector;
+import com.refinaria.advancedandroidcourse.ui.ScreenNavigator;
 
 import java.util.UUID;
 
@@ -22,48 +23,52 @@ import javax.inject.Inject;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private static String INSTANCE_ID_KEY = "instance_id";
+    private static final String INSTANCE_ID_KEY = "instance_id";
 
-    @Inject
-    ScreenInjector screenInjector;
+    @Inject ScreenInjector screenInjector;
+    @Inject ScreenNavigator screenNavigator;
 
     private String instanceId;
     private Router router;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         if (savedInstanceState != null) {
             instanceId = savedInstanceState.getString(INSTANCE_ID_KEY);
         } else {
             instanceId = UUID.randomUUID().toString();
         }
-
         Injector.inject(this);
-        setContentView(layoutRes());
+        super.onCreate(savedInstanceState);
 
+        setContentView(layoutRes());
         ViewGroup screenContainer = findViewById(R.id.screen_container);
         if (screenContainer == null) {
             throw new NullPointerException("Activity must have a view id: screen_container");
         }
 
-        super.onCreate(savedInstanceState);
-
         router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
+        screenNavigator.initWithRouter(router, initialScreen());
         monitorBackStack();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(INSTANCE_ID_KEY, instanceId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!screenNavigator.pop()) {
+            super.onBackPressed();
+        }
     }
 
     @LayoutRes
     protected abstract int layoutRes();
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // When passing through Config Changes, we store the ID
-        // and retrieve on the next onCreate
-        outState.putString(INSTANCE_ID_KEY, instanceId);
-    }
+    protected abstract Controller initialScreen();
 
     public String getInstanceId() {
         return instanceId;
@@ -72,10 +77,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Injector.clearComponent(this);
+        screenNavigator.clear();
+        if (isFinishing()) {
+            Injector.clearComponent(this);
+        }
     }
 
-    public ScreenInjector getInstanceInjector() {
+    public ScreenInjector getScreenInjector() {
         return screenInjector;
     }
 
@@ -98,11 +106,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                     boolean isPush,
                     @NonNull ViewGroup container,
                     @NonNull ControllerChangeHandler handler) {
-                if(!isPush && from != null) {
+                if (!isPush && from != null) {
                     Injector.clearComponent(from);
                 }
             }
         });
     }
-
 }

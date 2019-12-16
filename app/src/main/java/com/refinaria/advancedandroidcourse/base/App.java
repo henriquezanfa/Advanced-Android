@@ -1,13 +1,14 @@
 package com.refinaria.advancedandroidcourse.base;
 
+import android.app.Application;
+
 import com.refinaria.advancedandroidcourse.di.ActivityInjector;
 
 import javax.inject.Inject;
 
-public class App extends android.app.Application {
+public class App extends Application {
 
-    @Inject
-    ActivityInjector activityInjector;
+    @Inject ActivityInjector activityInjector;
 
     private ApplicationComponent component;
 

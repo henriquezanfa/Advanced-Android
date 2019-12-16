@@ -13,11 +13,10 @@ import dagger.multibindings.IntoMap;
 @Module(subcomponents = {
         TrendingReposComponent.class,
 })
-public abstract class MainScreenBidingModule {
+public abstract class MainScreenBindingModule {
 
     @Binds
     @IntoMap
     @ControllerKey(TrendingReposController.class)
     abstract AndroidInjector.Factory<? extends Controller> bindingTrendingReposInjector(TrendingReposComponent.Builder builder);
-
 }

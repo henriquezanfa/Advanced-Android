@@ -17,12 +17,12 @@ import dagger.android.AndroidInjector;
 
 @ActivityScope
 public class ScreenInjector {
-    private Map<Class<? extends Controller>, Provider<AndroidInjector.Factory<? extends Controller>>> screenInjectors;
+
+    private final Map<Class<? extends Controller>, Provider<AndroidInjector.Factory<? extends Controller>>> screenInjectors;
     private final Map<String, AndroidInjector<Controller>> cache = new HashMap<>();
 
     @Inject
     ScreenInjector(Map<Class<? extends Controller>, Provider<AndroidInjector.Factory<? extends Controller>>> screenInjectors){
-
         this.screenInjectors = screenInjectors;
     }
 
@@ -45,17 +45,14 @@ public class ScreenInjector {
         injector.inject(controller);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     void clear(Controller controller) {
-        cache.remove(controller);
+        cache.remove(controller.getInstanceId());
     }
 
     static ScreenInjector get(Activity activity) {
         if(!(activity instanceof BaseActivity)) {
             throw new IllegalArgumentException("Controller must be hosted by BaseActivity");
         }
-
-        return ((BaseActivity) activity).getInstanceInjector();
-
+        return ((BaseActivity) activity).getScreenInjector();
     }
 }

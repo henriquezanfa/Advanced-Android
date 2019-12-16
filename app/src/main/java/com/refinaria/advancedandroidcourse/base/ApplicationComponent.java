@@ -10,6 +10,5 @@ import dagger.Component;
         ActivityBindingModule.class,
 })
 public interface ApplicationComponent {
-
     void inject(App app);
 }
