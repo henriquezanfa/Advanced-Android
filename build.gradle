@@ -39,5 +39,6 @@ ext {
     rxRelayVersion = '2.0.0'
     conductorVersion = '2.1.4'
     timberVersion = '4.5.1'
+    butterknifeVersion = '10.0.0'
 }
 
