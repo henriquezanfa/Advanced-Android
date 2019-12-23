@@ -37,6 +37,8 @@ dependencies {
     compileOnly "com.google.auto.value:auto-value:$autoValueVersion"
     annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
 
+    implementation "com.jakewharton.threetenabp:threetenabp:$threeTenAbpVersion"
+
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion"
@@ -44,6 +46,6 @@ dependencies {
     implementation "com.bluelinelabs:conductor:$conductorVersion"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
