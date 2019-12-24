@@ -1,13 +1,17 @@
 package com.refinaria.advancedandroidcourse.base;
 
+import android.app.Application;
+
+import com.refinaria.advancedandroidcourse.BuildConfig;
 import com.refinaria.advancedandroidcourse.di.ActivityInjector;
 
 import javax.inject.Inject;
 
-public class App extends android.app.Application {
+import timber.log.Timber;
 
-    @Inject
-    ActivityInjector activityInjector;
+public class App extends Application {
+
+    @Inject ActivityInjector activityInjector;
 
     private ApplicationComponent component;
 
@@ -20,6 +24,10 @@ public class App extends android.app.Application {
                 .build();
 
         component.inject(this);
+
+        if(BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 
     public ActivityInjector getActivityInjector() {

@@ -26,12 +26,12 @@ public class ActivityInjector {
     }
 
     void inject(Activity activity) {
-        if(!(activity instanceof BaseActivity)) {
+        if (!(activity instanceof BaseActivity)) {
             throw new IllegalArgumentException("Activity must extends BaseActivity");
         }
 
-        String instanceId = (((BaseActivity) activity).getInstanceId());
-        if(cache.containsKey(instanceId)) {
+        String instanceId = ((BaseActivity) activity).getInstanceId();
+        if (cache.containsKey(instanceId)) {
             //noinspection unchecked
             ((AndroidInjector<Activity>) Objects.requireNonNull(cache.get(instanceId))).inject(activity);
             return;
@@ -39,15 +39,14 @@ public class ActivityInjector {
 
         //noinspection unchecked
         AndroidInjector.Factory<Activity> injectorFactory =
-                (AndroidInjector.Factory<Activity>)(Objects.requireNonNull(activityInjectors.get(activity.getClass())).get());
+                (AndroidInjector.Factory<Activity>) activityInjectors.get(activity.getClass()).get();
         AndroidInjector<Activity> injector = injectorFactory.create(activity);
-
         cache.put(instanceId, injector);
         injector.inject(activity);
     }
 
     void clear(Activity activity) {
-        if(!(activity instanceof BaseActivity)) {
+        if (!(activity instanceof BaseActivity)) {
             throw new IllegalArgumentException("Activity must extends BaseActivity");
         }
 
@@ -55,6 +54,6 @@ public class ActivityInjector {
     }
 
     static ActivityInjector get(Context context) {
-        return ((App)context.getApplicationContext()).getActivityInjector();
+        return ((App) context.getApplicationContext()).getActivityInjector();
     }
 }
